@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="82.74 107.406 290 160.162" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="gradient-0" gradientUnits="userSpaceOnUse" cx="162.959" cy="187.368" r="77.368" gradientTransform="matrix(1, 0, 0, 1, 20.041, 0.118988)">
+      <stop offset="0" style="stop-color: rgba(254, 254, 254, 1)"/>
+      <stop offset="1" style="stop-color: rgb(217, 46, 46);"/>
+    </radialGradient>
+    <linearGradient id="gradient-3" gradientUnits="userSpaceOnUse" x1="253.753" y1="152.329" x2="253.753" y2="231.507" gradientTransform="matrix(-0.005539, 0.999985, -0.373722, -0.002071, 325.924733, -63.425911)">
+      <stop offset="0" style="stop-color: rgba(216, 216, 216, 1)"/>
+      <stop offset="1" style="stop-color: rgba(165, 165, 165, 1)"/>
+    </linearGradient>
+    <linearGradient id="gradient-5" gradientUnits="userSpaceOnUse" x1="253.753" y1="152.329" x2="253.753" y2="231.507" gradientTransform="matrix(0.003778, 0.999993, -0.537998, 0.002036, 355.412831, -106.00074)">
+      <stop offset="0" style="stop-color: rgb(226, 226, 226);"/>
+      <stop offset="1" style="stop-color: rgba(114, 114, 114, 1)"/>
+    </linearGradient>
+    <radialGradient id="gradient-2" gradientUnits="userSpaceOnUse" cx="343.507" cy="187.368" r="77.368" gradientTransform="matrix(1, 0, 0, 1, -71, 0.118985)">
+      <stop offset="0" style="stop-color: rgb(255, 255, 255);"/>
+      <stop offset="1" style="stop-color: rgb(179, 179, 179);"/>
+    </radialGradient>
+  </defs>
+  <path style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0);" d="M 277.26 322.74"/>
+  <path style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0);" d="M 172.329 232.603"/>
+  <circle style="stroke-width: 3px; fill: url(#gradient-2); stroke: rgb(203, 203, 203);" cx="272.507" cy="187.487" r="55"/>
+  <path style="stroke-width: 3px; fill: url(#gradient-3); stroke: url(#gradient-5);" d="M 228.935 148.72 L 275.51 147.898 L 277.154 227.076 L 228.113 226.802 L 228.935 148.72 Z"/>
+  <circle style="stroke-width: 3px; fill: url(#gradient-0); stroke: rgb(163, 163, 163);" cx="183" cy="187.487" r="60"/>
+</svg>
