@@ -1148,7 +1148,7 @@ ${paneCSSFiller()}
 }
 `;
 
-    const jsCode = 
+    const jsCode = `
 /* jshint esversion: 6 */
 
 class slideShow {
@@ -1164,23 +1164,10 @@ class slideShow {
         this.paneContainer = this.slideShow.querySelector('.pane-container');
         this.textContainer = this.slideShow.querySelector('.text-container');
         this.pauseActive = this.slideShow.querySelector('.pause');
-        this.slideAnimations = [`${[...slideAnis]}`];
-        this.textAnimations = [`${[...textAnis]}`];
+        this.slideAnimations = [${[...slideAnis]}];
+        this.textAnimations = [${[...textAnis]}];
         this.timerOn;
     }
-
-
-
-
-    }
-
-//global variables to access elements. 
-
-//timerOn is for the autoPlay options lower down.
-
-
-
-// Core Functionality 
 
 // Creates the first (green) tick that is active.
 createFirstTick() {
@@ -1311,25 +1298,31 @@ previousPane(){
 autoPlayControl(event){
 
     if (event === undefined) {
-        timerOn = setInterval(nextPane, Number(${apTimer.value}));
+        this.timerOn = setInterval(this.nextPane, Number(${apTimer.value}));
     } else if (event.target.getAttribute('src') === 'images/pause.svg') {
-        clearInterval(timerOn);
+        clearInterval(this.timerOn);
         event.target.setAttribute('src', 'images/play.svg')
     } else if (event.target.getAttribute('src') === 'images/play.svg') {
-        timerOn = setInterval(nextPane, Number(${apTimer.value}));
+        this.timerOn = setInterval(this.nextPane, Number(${apTimer.value}));
         event.target.setAttribute('src', 'images/pause.svg');
     }
 
 };
 
-paneTickInit();
-autoPlayControl();
-
-this.forward.onclick = () => this.nextPane();
-this.backward.onclick = () => this.previousPane();
-document.onkeydown = () => this.filterArrows();
-this.pauseActive.onclick = () => this.autoPlayControl();
+initHandlers() {
+    this.paneTickInit();
+    this.autoPlayControl();
     
+    this.forward.onclick = () => this.nextPane();
+    this.backward.onclick = () => this.previousPane();
+    this.slideShow.onkeydown = () => this.filterArrows();
+    this.pauseActive.onclick = () => this.autoPlayControl();
+}
+
+
+
+    }
+    `   
 ;
     codeContainers.style.opacity = '1';
     HTMLDownload.value = htmlCode;
