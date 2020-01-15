@@ -1153,7 +1153,7 @@ ${paneCSSFiller()}
 
 class slideShow {
     constructor(showNumber) {
-        this.slideShow = document.querySelector(`${showNumber}`)
+        this.slideShow = document.querySelector('.' + showNumber)
         this.paneTicker = this.slideShow.querySelector('.pane-ticker');
         this.forward = this.slideShow.querySelector('.forward');
         this.backward = this.slideShow.querySelector('.backward');
