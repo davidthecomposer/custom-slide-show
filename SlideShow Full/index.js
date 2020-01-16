@@ -693,7 +693,7 @@ const createCodeDownload = () => {
 <body>
     <!-- Main Carousel -->
 
-    <div class="carousel">
+    <div class="carousel one">
         <div class="manual-navigation">
             <img class="navigate backward hidden" src="images/backPanel.svg" alt="">
             <div class="pane-ticker">
@@ -1153,7 +1153,7 @@ ${paneCSSFiller()}
 
     class SlideShow {
         constructor(showNumber) {
-            this.slideShow = document.querySelector(.showNumber);
+            this.slideShow = document.querySelector("."+ showNumber);
             this.paneTicker = this.slideShow.querySelector('.pane-ticker');
             this.forward = this.slideShow.querySelector('.forward');
             this.backward = this.slideShow.querySelector('.backward');
