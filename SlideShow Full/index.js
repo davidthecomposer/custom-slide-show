@@ -254,7 +254,7 @@ const autoPlay = () => {
     if (autoPlayButton.src.includes('images/toggleOff.svg')) {
         autoPlayStart();
         autoPlayButton.src = 'images/toggleOn.svg';
-        pauseActive.setAttribute('src', 'images/pause.svg')
+        pauseActive.setAttribute('src', 'images/pause.svg');
     } else {
         autoPlayStop();
         autoPlayButton.src = 'images/toggleOff.svg';
@@ -663,9 +663,11 @@ const createCodeDownload = () => {
     const paneCSSFiller = () => {
 
         return [...slideRows].map((row) => {
-            let indexNum = row.firstElementChild.innerText - 1;
+            let indexNum = row.children[1].innerText - 1;
+
+            console.log(indexNum)
             return `
-.pane-${row.firstElementChild.innerText} {
+.pane-${indexNum + 1} {
         position: absolute;
         height: ${imageHeights[indexNum]};
         width: ${imageWidths[indexNum]};
