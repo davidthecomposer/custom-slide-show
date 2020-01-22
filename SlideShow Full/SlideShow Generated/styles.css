@@ -102,36 +102,36 @@ video {
 }
 
 
-.pane- {
+.pane-1 {
         position: absolute;
-        height: undefined;
-        width: undefined;
-        font-size: undefined;
-        color: undefined;
+        height: 100%;
+        width: 100%;
+        font-size: 3rem;
+        color: #000000;
     }
 
-.pane- {
+.pane-2 {
         position: absolute;
-        height: undefined;
-        width: undefined;
-        font-size: undefined;
-        color: undefined;
+        height: 100%;
+        width: 100%;
+        font-size: 3rem;
+        color: #000000;
     }
 
-.pane- {
+.pane-3 {
         position: absolute;
-        height: undefined;
-        width: undefined;
-        font-size: undefined;
-        color: undefined;
+        height: 100%;
+        width: 100%;
+        font-size: 3rem;
+        color: #000000;
     }
 
-.pane- {
+.pane-4 {
         position: absolute;
-        height: undefined;
-        width: undefined;
-        font-size: undefined;
-        color: undefined;
+        height: 100%;
+        width: 100%;
+        font-size: 3rem;
+        color: #000000;
     }
 
 .main-images {
