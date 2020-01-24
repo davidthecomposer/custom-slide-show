@@ -665,7 +665,6 @@ const createCodeDownload = () => {
         return [...slideRows].map((row) => {
             let indexNum = row.children[1].innerText - 1;
 
-            console.log(indexNum)
             return `
 .pane-${indexNum + 1} {
         position: absolute;

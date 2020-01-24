@@ -141,11 +141,9 @@
         autoPlayControl(event) {
             if (event === undefined) {
               this.timerOn = setInterval(() => {this.nextPane()}, Number(3000));
-              console.log('this option');
             } else if (event.target.getAttribute('src') === 'images/pause.svg') {
                 clearInterval(this.timerOn);
                 event.target.setAttribute('src', 'images/play.svg');
-                console.log('stopped')
             } else {
                 this.timerOn = setInterval(() => {this.nextPane()}, Number(3000));
                 event.target.setAttribute('src', 'images/pause.svg');
