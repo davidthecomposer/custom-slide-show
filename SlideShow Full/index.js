@@ -649,12 +649,18 @@ const createCodeDownload = () => {
     });
 
     const paneFiller = () => {
-
+        [...panes].forEach((pane) => {
+            let indexNum = [...panes].indexOf(pane);
+            pane.classList.add(`pane-${indexNum + 1}`);
+        });
         return [...panes].map((pane) => pane.outerHTML).join('\n');
-
     };
 
     const slideTextFiller = () => {
+        [...slideText].forEach((text) => {
+            let indexNum = [...slideText].indexOf(text);
+            text.classList.add(`text-${indexNum + 1}`);
+        });
 
         return [...slideText].map((text) => text.outerHTML).join('\n');
 
@@ -664,18 +670,22 @@ const createCodeDownload = () => {
 
         return [...slideRows].map((row) => {
             let indexNum = row.children[1].innerText - 1;
-
+            row.classList.add(`pane-${indexNum + 1}`);
             return `
 .pane-${indexNum + 1} {
-        position: absolute;
-        height: ${imageHeights[indexNum]};
-        width: ${imageWidths[indexNum]};
-        font-size: ${fontSizes[indexNum]};
-        color: ${fontColors[indexNum]};
-    }`;
+    position: absolute;
+    height: ${imageHeights[indexNum]};
+    width: ${imageWidths[indexNum]};
+        
+}
+
+.text-${indexNum + 1} {
+    font-size: ${fontSizes[indexNum]};
+    color: ${fontColors[indexNum]};
+}`;
         }).join('\n');
 
-    };
+  };
 
 
     // HTML Code Snippets
@@ -1381,4 +1391,3 @@ update code download if needed
 Features:
 
 */
-
