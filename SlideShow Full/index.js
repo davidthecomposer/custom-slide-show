@@ -1,83 +1,69 @@
 /* jshint esversion: 6 */
 
-//global variables to access elements. 
-const paneTicker = document.querySelector('.pane-ticker');
-const forward = document.querySelector('.forward');
-const backward = document.querySelector('.backward');
-const slideText = document.querySelectorAll('.slide-text');
-const cog = document.querySelector('.cog');
-const settings = document.querySelector('.settings');
-const autoPlayButton = document.querySelector('.auto-play-btn');
-const apTimer = document.querySelector('.ap-timer');
-const height = document.querySelector('.height');
-const width = document.querySelector('.width');
-const resizeButton = document.querySelector('.resize');
-const errorMessage = document.querySelector('.error-message');
-const exit = document.querySelector('.exit');
-const mainImages = document.querySelectorAll('.main-images');
-const slideOptions = document.querySelector('.slide-options');
-const slideColumn = document.querySelector('.slide-column');
-const slideToggleButton = document.querySelector('.slide-toggle-button');
-const slideEditInactive = document.querySelector('.slide-edit-inactive');
-const paneContainer = document.querySelector('.pane-container');
-const textContainer = document.querySelector('.text-container');
-const pauseActive = document.querySelector('.pause');
-const generate = document.querySelector('.generate');
-let moveUp = document.querySelectorAll('.move-up');
-let moveDown = document.querySelectorAll('.move-down');
-const tooltipToggle = document.querySelector('.tooltip-toggle-button');
-const codeContainers = document.querySelector('.code-containers');
-
 //timerOn is for the autoPlay options lower down.
-let timerOn;
+
+const timerOnObject = {
+
+    timerOn: '',
+}
+
 
 //Add to these to customize animation text effects per slide. Must have one for each slide.
-let textAnimations = ['center-long', 'top-right', 'center-short', 'top-left'];
+const animations = {
+    textAnimations: ['center-long', 'top-right', 'center-short', 'top-left'],
+    masterTextAnimations: ['center-long', 'top-right', 'center-short', 'top-left'],
+    slideAnimations: ['slide-in', 'fade-in', 'oval-shrink', 'crazy'],
+    masterSlideAnimations: ['slide-in', 'fade-in', 'oval-shrink', 'crazy'],
+}
 
-//This is a list of all unique custom animation text effects. For populating the Select element.
-let masterTextAnimations = ['center-long', 'top-right', 'center-short', 'top-left'];
 
-//Add to these to customize animation slide effects per slide on init. 
-let slideAnimations = ['slide-in', 'fade-in', 'oval-shrink', 'crazy'];
-
-//This is a list of all unique slide animation effects. for populating the appropriate Select element.
-let masterSlideAnimations = ['slide-in', 'fade-in', 'oval-shrink', 'crazy'];
 
 // Core Functionality 
 
-// Creates the first (green) tick that is active.
-const createFirstTick = () => {
-    let newFirstTick = document.createElement('img');
-    newFirstTick.className = 'pane-tick';
-    newFirstTick.src = 'images/activePane.svg';
-    paneTicker.appendChild(newFirstTick);
-};
 
-//creates one tick as a helper function to paneTickInit. 
-const createTick = () => {
-    let newTick = document.createElement('img');
-    newTick.classList.add('pane-tick');
-    newTick.src = 'images/inactivePane.svg';
-    paneTicker.appendChild(newTick);
-};
+const createTicks = () => {
 
-//Calls either function above for whatever panes exist in HTML. 
-const paneTickInit = () => {
-    const panes = document.querySelectorAll('.pane');
-    panes.forEach((pane) => {
-        if (pane === panes[0]) {
-            createFirstTick();
-            pane.classList.add('active-panel');
-        } else {
-            createTick();
-            pane.classList.add('invisible-panel');
-        }
-    });
-};
+    const paneTicker = document.querySelector('.pane-ticker');
 
+    // Creates the first (green) tick that is active.
+    const createFirstTick = () => {
+        let newFirstTick = document.createElement('img');
+        newFirstTick.className = 'pane-tick';
+        newFirstTick.src = 'images/activePane.svg';
+        paneTicker.appendChild(newFirstTick);
+    };
+
+    //creates one tick as a helper function to paneTickInit. 
+    const createTick = () => {
+        let newTick = document.createElement('img');
+        newTick.classList.add('pane-tick');
+        newTick.src = 'images/inactivePane.svg';
+        paneTicker.appendChild(newTick);
+    };
+
+
+
+    //Calls either function above for whatever panes exist in HTML. 
+    const paneTickInit = () => {
+        const panes = document.querySelectorAll('.pane');
+        panes.forEach((pane) => {
+            if (pane === panes[0]) {
+                createFirstTick();
+                pane.classList.add('active-panel');
+            } else {
+                createTick();
+                pane.classList.add('invisible-panel');
+            }
+        });
+    };
+
+    paneTickInit();
+
+};
 
 // this is the default use case for any forward movement (manual arrow or autoplay)
 const activePanelForward = () => {
+    const settings = document.querySelector('.settings');
     const panes = document.querySelectorAll('.pane');
     const slideText = document.querySelectorAll('.slide-text');
     const lastIndex = panes.length - 1;
@@ -138,6 +124,7 @@ const activePanelForward = () => {
 
 //Progresses backward through panes when clicking backward button.
 const previousPane = () => {
+    const settings = document.querySelector('.settings');
     const panes = document.querySelectorAll('.pane');
     const slideText = document.querySelectorAll('.slide-text');
     const slideRows = document.querySelectorAll('.slide-row');
@@ -206,6 +193,7 @@ const keyboardNavigation = (event) => {
 
 //This is used when the user clicks on the cog, or the X to close the settings window.
 const optionsInit = () => {
+    const settings = document.querySelector('.settings');
 
     settings.style.opacity = '0.95';
     if (settings.style.zIndex === '4') {
@@ -220,47 +208,61 @@ const optionsInit = () => {
 
 // Logic for starting the autoplay. Includes error message handling. 
 const autoPlayStart = () => {
+    const errorMessage = document.querySelector('.error-message');
+    const apTimer = document.querySelector('.ap-timer');
     const onlyNumbers = /([0-9]{1,7})/g;
     if (apTimer.value !== '' && apTimer.value.match(onlyNumbers) && apTimer.value.match(onlyNumbers)[0].length === apTimer.value.length) {
-        timerOn = setInterval(activePanelForward, Number(apTimer.value));
+        timerOnObject.timerOn = setInterval(activePanelForward, Number(apTimer.value));
     } else if (apTimer.value === '') {
-        timerOn = setInterval(activePanelForward, 3000);
+        timerOnObject.timerOn = setInterval(activePanelForward, 3000);
         apTimer.value = '3000';
         errorMessage.innerHTML = 'Using default interval';
         setTimeout(() => {
             errorMessage.innerHTML = '';
         }, 3000);
     } else {
-        timerOn = setInterval(activePanelForward, 3000);
+        timerOnObject.timerOn = setInterval(activePanelForward, 3000);
         apTimer.value = '3000';
         errorMessage.innerHTML = 'digits only please. Using default interval';
         setTimeout(() => {
             errorMessage.innerHTML = '';
         }, 3000);
-
     }
-
-
 };
 
 // helper function to stop autoplay
 const autoPlayStop = () => {
-    clearInterval(timerOn);
+    clearInterval(timerOnObject.timerOn);
 };
 
 
 // Sets up and takes down the auto-play and play/pause functionality. Needs to be called. 
-const autoPlay = () => {
-    if (autoPlayButton.src.includes('images/toggleOff.svg')) {
-        autoPlayStart();
-        autoPlayButton.src = 'images/toggleOn.svg';
-        pauseActive.setAttribute('src', 'images/pause.svg');
-    } else {
-        autoPlayStop();
-        autoPlayButton.src = 'images/toggleOff.svg';
-        pauseActive.setAttribute('src', 'images/play.svg');
-    }
+
+const autoPlayInit = () => {
+
+    const pauseActive = document.querySelector('.pause');
+    const autoPlayButton = document.querySelector('.auto-play-btn');
+
+    const autoPlay = () => {
+        if (autoPlayButton.src.includes('images/toggleOff.svg')) {
+            autoPlayStart();
+            autoPlayButton.src = 'images/toggleOn.svg';
+            pauseActive.setAttribute('src', 'images/pause.svg');
+        } else {
+            autoPlayStop();
+            autoPlayButton.src = 'images/toggleOff.svg';
+            pauseActive.setAttribute('src', 'images/play.svg');
+        }
+    };
+
+    pauseActive.addEventListener('click', autoPlay);
+    autoPlayButton.addEventListener('click', autoPlay);
 };
+
+
+
+
+
 
 // Clears the ticks when re-counting after updating cog settings
 const clearTicks = () => {
@@ -272,29 +274,32 @@ const clearTicks = () => {
 
 //This logic changes the carousel size and enforces valid entries by the user.
 const changeMasterSize = () => {
+    const errorMessage = document.querySelector('.error-message');
+    const masterHeight = document.querySelector('.height');
+    const masterWidth = document.querySelector('.width');
     const carousel = document.querySelector('.carousel');
     const validSize = /([0-9]{1,4}).?([0-9]{1,3})?(px|rem|%|em)/gi;
-    if (height.value.match(validSize) && width.value.match(validSize)) {
+    if (masterHeight.value.match(validSize) && masterWidth.value.match(validSize)) {
 
-        carousel.style.width = width.value;
-        carousel.style.height = height.value;
+        carousel.style.width = masterWidth.value;
+        carousel.style.height = masterHeight.value;
 
-    } else if (height.value.match(validSize)) {
+    } else if (masterHeight.value.match(validSize)) {
         errorMessage.innerHTML = 'please input a valid unit for width';
-        width.value = '';
+        masterWidth.value = '';
         setTimeout(() => {
             errorMessage.innerHTML = '';
         }, 3000);
-    } else if (width.value.match(validSize)) {
+    } else if (masterWidth.value.match(validSize)) {
         errorMessage.innerHTML = 'please input a valid unit for height';
-        height.value = '';
+        masterHeight.value = '';
         setTimeout(() => {
             errorMessage.innerHTML = '';
         }, 3000);
     } else {
         errorMessage.innerHTML = 'please input a valid unit of measurement';
-        height.value = '';
-        width.value = '';
+        masterHeight.value = '';
+        masterWidth.value = '';
         setTimeout(() => {
             errorMessage.innerHTML = '';
         }, 3000);
@@ -304,6 +309,7 @@ const changeMasterSize = () => {
 
 // Logic used within initInputChecks to validate entries in those 3 types of elements.
 const slideRowValidation = (event) => {
+    const errorMessage = document.querySelector('.error-message');
     const validSize = /([0-9]{1,4}).?([0-9]{1,3})?(px|rem|%|em)/gi;
 
     if (!event.target.value.match(validSize)) {
@@ -324,6 +330,7 @@ const initInputChecks = () => {
 
 // turns the tooltips on or off depending on what the user toggles.
 const handleTTToggle = () => {
+    const tooltipToggle = document.querySelector('.tooltip-toggle-button');
 
     return tooltipToggle.getAttribute('src') === 'images/toggleOn.svg' ?
         tooltipToggle.setAttribute('src', 'images/toggleOff.svg') :
@@ -332,6 +339,8 @@ const handleTTToggle = () => {
 
 //This handles the logic of assigning the hints. All hints display as the errorMessage element.
 const handleHints = (event) => {
+    const errorMessage = document.querySelector('.error-message');
+    const tooltipToggle = document.querySelector('.tooltip-toggle-button');
     errorMessage.style.color = 'rgb(45, 255, 38)';
     let classValue = event.target.classList.value;
 
@@ -360,16 +369,17 @@ const handleHints = (event) => {
 
 };
 
+
 //  This populates users text animation options according to the master Array
 const textAnimationOptions = () => {
 
-    return masterTextAnimations.map((ani) => `<option value="${ani}">${ani}</option>`).join('');
+    return animations.masterTextAnimations.map((ani) => `<option value="${ani}">${ani}</option>`).join('');
 };
 
 //  This populates users slide animation options according to the master Array
 const slideAnimationOptions = () => {
 
-    return masterSlideAnimations.map((ani) => `<option value="${ani}">${ani}</option>`).join('');
+    return animations.masterSlideAnimations.map((ani) => `<option value="${ani}">${ani}</option>`).join('');
 };
 
 //  Changes thedefault rgb color code to Hhexidecimal.
@@ -389,7 +399,9 @@ const getCompColorStyle = (el) => {
 };
 
 // Builds the slide rows that are already loaded in HTML etc.
-const makeSlideRow = (image) => {
+const makeSlideRow = (image, mainImages) => {
+
+    const slideText = document.querySelectorAll('.slide-text');
     const panes = document.querySelectorAll('.pane');
     let indexNumber = [...mainImages].indexOf(image);
     let newSlideRow = document.createElement('div');
@@ -397,6 +409,7 @@ const makeSlideRow = (image) => {
     slideText[indexNumber].style.fontSize = "3rem";
     let hexColor = getCompColorStyle(slideText[indexNumber]);
     let imageName = image.src.match(/(images)\/(\S+).(\S+)/gi)[0];
+    const slideOptions = document.querySelector('.slide-options');
 
 
     newSlideRow.innerHTML = `
@@ -425,12 +438,12 @@ const makeSlideRow = (image) => {
                 <input type="color" class="input-color" value="${hexColor}"></input>
                 </div>
                 <div class="inner-row-div2 text-animation">
-                   <select class="text-animation-styles" value="${textAnimations[indexNumber]}">
+                   <select class="text-animation-styles" value="${animations.textAnimations[indexNumber]}">
                     ${textAnimationOptions()}
                    </select>
                 </div>
                 <div class="inner-row-div2 slide-animation" >
-                   <select  class="slide-animation-styles" value="${slideAnimations[indexNumber]}">
+                   <select  class="slide-animation-styles" value="${animations.slideAnimations[indexNumber]}">
                    ${slideAnimationOptions()}
                 </select>
                 </div>
@@ -442,19 +455,22 @@ const makeSlideRow = (image) => {
     slideOptions.appendChild(newSlideRow);
     let textAnimationStyles = document.querySelectorAll('.text-animation-styles');
     let slideAnimationStyles = document.querySelectorAll('.slide-animation-styles');
-    textAnimationStyles[indexNumber].value = textAnimations[indexNumber];
-    slideAnimationStyles[indexNumber].value = slideAnimations[indexNumber];
+    textAnimationStyles[indexNumber].value = animations.textAnimations[indexNumber];
+    slideAnimationStyles[indexNumber].value = animations.slideAnimations[indexNumber];
     initInputChecks();
 
 };
 
 // populates the first set of slide rows based on how many images are loaded into HTML
 const slideRowInit = () => {
+
+    const mainImages = document.querySelectorAll('.main-images');
+
     mainImages.forEach((image) => {
 
-        makeSlideRow(image);
+        makeSlideRow(image, mainImages);
     });
-    handlefirstLast();
+    handleFirstLast();
 
 };
 
@@ -468,9 +484,15 @@ const orderHelper = () => {
 
 /*This logic deletes the move up arrow and move down arrow respectively for first and last. So user 
 can't cause an error.*/
-const handlefirstLast = () => {
-    moveUp = document.querySelectorAll('.move-up');
-    moveDown = document.querySelectorAll('.move-down');
+
+
+
+
+
+const handleFirstLast = () => {
+    const moveUp = document.querySelectorAll('.move-up');
+    const moveDown = document.querySelectorAll('.move-down');
+
     const slideRows = document.querySelectorAll('.slide-row');
     if (slideRows.length > 0) {
         moveUp.forEach((arrow) => {
@@ -484,20 +506,28 @@ const handlefirstLast = () => {
     }
 };
 
-// This covers what happens when the user click the "plus" to add a new row. 
-const addNewRow = (event) => {
-    const slideRow = document.querySelectorAll('.slide-row');
-    let lastIndex = slideRow.length;
-    let newSlideRow = document.createElement('div');
-    newSlideRow.classList.add('slide-row');
-    let newPane = document.createElement('img');
-    newPane.classList.add('main-images', 'pane', 'invisible-panel');
-    let newText = document.createElement('p');
-    newText.classList.add('slide-text', 'invisible-text');
-    newText.innerHTML = 'New Slide Text';
+const rowFunctions = () => {
+    const paneContainer = document.querySelector('.pane-container');
+    const textContainer = document.querySelector('.text-container');
+    const moveUp = document.querySelectorAll('.move-up');
+    const moveDown = document.querySelectorAll('.move-down');
+    const addRowButtons = document.querySelectorAll('.add-row');
+    const subtractRowButtons = document.querySelectorAll('.subtract-row');
+    const slideOptions = document.querySelector('.slide-options');
+    // This covers what happens when the user click the "plus" to add a new row. 
+    const addNewRow = (event) => {
+        const slideRow = document.querySelectorAll('.slide-row');
+        let lastIndex = slideRow.length;
+        let newSlideRow = document.createElement('div');
+        newSlideRow.classList.add('slide-row');
+        let newPane = document.createElement('img');
+        newPane.classList.add('main-images', 'pane', 'invisible-panel');
+        let newText = document.createElement('p');
+        newText.classList.add('slide-text', 'invisible-text');
+        newText.innerHTML = 'New Slide Text';
 
 
-    newSlideRow.innerHTML = `
+        newSlideRow.innerHTML = `
                    <div class="edit-tools-row">
                     <div class="drag-n-drop"> 
                       <div class="move-up"> </div>
@@ -537,87 +567,113 @@ const addNewRow = (event) => {
                 </div>
             
 `;
-    if (slideRow.length === 0) {
-        slideOptions.appendChild(newSlideRow);
-        paneContainer.appendChild(newPane);
-        textContainer.appendChild(newText);
-    } else {
-        event.target.parentElement.parentElement.after(newSlideRow);
-        orderHelper();
+        if (slideRow.length === 0) {
+            slideOptions.appendChild(newSlideRow);
+            paneContainer.appendChild(newPane);
+            textContainer.appendChild(newText);
+        } else {
+            event.target.parentElement.parentElement.after(newSlideRow);
+            orderHelper();
+            let parent = event.target.parentElement.parentElement;
+            let index = [...slideOptions.children].indexOf(parent);
+            [...paneContainer.children][index].after(newPane);
+            [...textContainer.children][index].after(newText);
+
+        }
+        newSlideRow.querySelector('.move-up').addEventListener('click', moveRow);
+        newSlideRow.children[0].children[0].children[1].addEventListener('click', moveRow);
+        newSlideRow.children[0].children[1].addEventListener('click', addNewRow);
+        newSlideRow.children[0].children[2].addEventListener('click', deleteSlideRow);
+        newSlideRow.querySelectorAll('.move-up, .move-down, .add-row, .subtract-row, .image-src, .image-height, .image-width, .font-size').forEach((item) => {
+            item.addEventListener('mouseover', handleHints);
+            item.addEventListener('mouseout', handleHints);
+        });
+
+        clearTicks();
+        createTicks();
+        handleFirstLast();
+        initInputChecks();
+    };
+
+    // This handles what happens when the user clicks the delete (minus) button.
+    const deleteSlideRow = (event) => {
+        const slideRow = document.querySelectorAll('.slide-row');
         let parent = event.target.parentElement.parentElement;
         let index = [...slideOptions.children].indexOf(parent);
-        [...paneContainer.children][index].after(newPane);
-        [...textContainer.children][index].after(newText);
+        if (slideRow.length === 1) {
+            event.target.parentElement.parentElement.remove();
+            [...paneContainer.children][index].remove();
+            [...textContainer.children][index].remove();
+            addNewRow();
+        } else {
+            event.target.parentElement.parentElement.remove();
+            orderHelper();
+            [...paneContainer.children][index].remove();
+            [...textContainer.children][index].remove();
+        }
+        handleFirstLast();
+    };
 
-    }
-    newSlideRow.querySelector('.move-up').addEventListener('click', moveRow);
-    newSlideRow.children[0].children[0].children[1].addEventListener('click', moveRow);
-    newSlideRow.children[0].children[1].addEventListener('click', addNewRow);
-    newSlideRow.children[0].children[2].addEventListener('click', deleteSlideRow);
-    newSlideRow.querySelectorAll('.move-up, .move-down, .add-row, .subtract-row, .image-src, .image-height, .image-width, .font-size').forEach((item) => {
-        item.addEventListener('mouseover', handleHints);
-        item.addEventListener('mouseout', handleHints);
-    });
-
-    clearTicks();
-    paneTickInit();
-    handlefirstLast();
-    initInputChecks();
-};
-
-// This handles what happens when the user clicks the delete (minus) button.
-const deleteSlideRow = (event) => {
-    const slideRow = document.querySelectorAll('.slide-row');
-    let parent = event.target.parentElement.parentElement;
-    let index = [...slideOptions.children].indexOf(parent);
-    if (slideRow.length === 1) {
-        event.target.parentElement.parentElement.remove();
-        [...paneContainer.children][index].remove();
-        [...textContainer.children][index].remove();
-        addNewRow();
-    } else {
-        event.target.parentElement.parentElement.remove();
+    // This handles what happens when a user clicks one of the arrows to move a row up or down.
+    const moveRow = (event) => {
+        let moveRowParent = event.target.parentElement.parentElement.parentElement;
+        let index = [...slideOptions.children].indexOf(moveRowParent);
+        let paneToMove = [...paneContainer.children][index];
+        let textToMove = [...textContainer.children][index];
+        if (event.target.classList.value === 'move-up') {
+            [...slideOptions.children][index - 1].insertAdjacentElement('beforebegin', moveRowParent);
+            [...paneContainer.children][index - 1].insertAdjacentElement('beforebegin', paneToMove);
+            [...textContainer.children][index - 1].insertAdjacentElement('beforebegin', textToMove);
+        } else if (event.target.classList.value === 'move-down') {
+            [...slideOptions.children][index + 1].insertAdjacentElement('afterend', moveRowParent);
+            [...paneContainer.children][index + 1].insertAdjacentElement('afterend', paneToMove);
+            [...textContainer.children][index + 1].insertAdjacentElement('afterend', textToMove);
+        }
         orderHelper();
-        [...paneContainer.children][index].remove();
-        [...textContainer.children][index].remove();
-    }
-    handlefirstLast();
-};
+        handleFirstLast();
+        clearTicks();
+        createTicks();
+    };
+    moveUp.forEach((up) => {
+        up.addEventListener('click', moveRow);
+    });
+    moveDown.forEach((down) => {
+        down.addEventListener('click', moveRow);
+    });
+    
+   
 
-// This handles what happens when a user clicks one of the arrows to move a row up or down.
-const moveRow = (event) => {
-    let moveRowParent = event.target.parentElement.parentElement.parentElement;
-    let index = [...slideOptions.children].indexOf(moveRowParent);
-    let paneToMove = [...paneContainer.children][index];
-    let textToMove = [...textContainer.children][index];
-    if (event.target.classList.value === 'move-up') {
-        [...slideOptions.children][index - 1].insertAdjacentElement('beforebegin', moveRowParent);
-        [...paneContainer.children][index - 1].insertAdjacentElement('beforebegin', paneToMove);
-        [...textContainer.children][index - 1].insertAdjacentElement('beforebegin', textToMove);
-    } else if (event.target.classList.value === 'move-down') {
-        [...slideOptions.children][index + 1].insertAdjacentElement('afterend', moveRowParent);
-        [...paneContainer.children][index + 1].insertAdjacentElement('afterend', paneToMove);
-        [...textContainer.children][index + 1].insertAdjacentElement('afterend', textToMove);
-    }
-    orderHelper();
-    handlefirstLast();
-    clearTicks();
-    paneTickInit();
+    addRowButtons.forEach((button) => {
+        button.addEventListener('click', addNewRow);
+    });
+    subtractRowButtons.forEach((button) => {
+        button.addEventListener('click', deleteSlideRow);
+    });
 };
 
 // control for slide edit toggle
-const slideEditInit = () => {
-    if (slideToggleButton.src.includes('images/toggleOff.svg')) {
-        slideEditInactive.style.zIndex = '-1';
-        slideEditInactive.style.opacity = '0';
-        slideOptions.style.opacity = '1';
-        slideToggleButton.src = 'images/toggleOn.svg';
-    } else {
-        slideToggleButton.src = 'images/toggleOff.svg';
-        slideEditInactive.style.zIndex = '10';
-        slideEditInactive.style.opacity = '1';
-        slideOptions.style.opacity = '.2';
-    }
+
+const slideToggleControl = () => {
+
+    const slideToggleButton = document.querySelector('.slide-toggle-button');
+    const slideEditInactive = document.querySelector('.slide-edit-inactive');
+    const slideOptions = document.querySelector('.slide-options');
+
+    const slideEditInit = () => {
+        if (slideToggleButton.src.includes('images/toggleOff.svg')) {
+            slideEditInactive.style.zIndex = '-1';
+            slideEditInactive.style.opacity = '0';
+            slideOptions.style.opacity = '1';
+            slideToggleButton.src = 'images/toggleOn.svg';
+        } else {
+            slideToggleButton.src = 'images/toggleOff.svg';
+            slideEditInactive.style.zIndex = '10';
+            slideEditInactive.style.opacity = '1';
+            slideOptions.style.opacity = '.2';
+        }
+    };
+
+    slideToggleButton.addEventListener('click', slideEditInit);
 };
 
 //This creates the user code download. It reads from the slide rows and simplifies the code to be more streamlined.
@@ -628,6 +684,8 @@ const createCodeDownload = () => {
     const HTMLDownload = document.getElementById('html-output');
     const CSSDownload = document.getElementById('css-output');
     const JSDownload = document.getElementById('js-output');
+    const codeContainers = document.querySelector('.code-containers');
+    const apTimer = document.querySelector('.ap-timer');
 
     const imageHeights = [...document.querySelectorAll('.image-height')].map((img) => {
         return img.getAttribute('value');
@@ -685,7 +743,7 @@ const createCodeDownload = () => {
 }`;
         }).join('\n');
 
-  };
+    };
 
 
     // HTML Code Snippets
@@ -823,8 +881,8 @@ video {
 
 .carousel {
     position: absolute;
-    width: ${width.value};
-    height: ${height.value};
+    width: ${masterWidth.value};
+    height: ${masterHeight.value};
     top: 10%;
     left: 10%;
     border: solid 2px rgba(0, 0, 0, 0.178);
@@ -1339,47 +1397,51 @@ ${paneCSSFiller()}
 };
 
 //the initial paneTick call and slideInit call on page load. 
-paneTickInit();
-slideRowInit();
 
 //must be read after slideRowInit or will be empty
-const dragNDrops = document.querySelectorAll('.drag-n-drop');
-const addRowButtons = document.querySelectorAll('.add-row');
-const subtractRowButtons = document.querySelectorAll('.subtract-row');
-const hints = document.querySelectorAll('.height, .width, .ap-timer, .move-up, .move-down, .add-row, .subtract-row, .image-src, .image-height, .image-width, .font-size');
+
+
+
 
 
 
 
 //Event Listeners: 
-forward.addEventListener('click', activePanelForward);
-backward.addEventListener('click', previousPane);
-document.addEventListener('keydown', keyboardNavigation);
-cog.addEventListener('click', optionsInit);
-autoPlayButton.addEventListener('click', autoPlay);
-resizeButton.addEventListener('click', changeMasterSize);
-exit.addEventListener('click', optionsInit);
-slideToggleButton.addEventListener('click', slideEditInit);
-pauseActive.addEventListener('click', autoPlay);
-generate.addEventListener('click', createCodeDownload);
-moveUp.forEach((up) => {
-    up.addEventListener('click', moveRow);
-});
-moveDown.forEach((down) => {
-    down.addEventListener('click', moveRow);
-});
-addRowButtons.forEach((button) => {
-    button.addEventListener('click', addNewRow);
-});
-subtractRowButtons.forEach((button) => {
-    button.addEventListener('click', deleteSlideRow);
-});
-hints.forEach((item) => {
-    item.addEventListener('mouseover', handleHints);
-    item.addEventListener('mouseout', handleHints);
-});
-tooltipToggle.addEventListener('click', handleTTToggle);
 
+const eventListenersInit = () => {
+
+    const forward = document.querySelector('.forward');
+    const backward = document.querySelector('.backward');
+    const cog = document.querySelector('.cog');
+    const resizeButton = document.querySelector('.resize');
+    const exit = document.querySelector('.exit');
+    const generate = document.querySelector('.generate');
+    const hints = document.querySelectorAll('.height, .width, .ap-timer, .move-up, .move-down, .add-row, .subtract-row, .image-src, .image-height, .image-width, .font-size');
+    const tooltipToggle = document.querySelector('.tooltip-toggle-button');
+
+    forward.addEventListener('click', activePanelForward);
+    backward.addEventListener('click', previousPane);
+    document.addEventListener('keydown', keyboardNavigation);
+    cog.addEventListener('click', optionsInit);
+    resizeButton.addEventListener('click', changeMasterSize);
+    exit.addEventListener('click', optionsInit);
+    generate.addEventListener('click', createCodeDownload);
+    hints.forEach((item) => {
+        item.addEventListener('mouseover', handleHints);
+        item.addEventListener('mouseout', handleHints);
+    });
+    tooltipToggle.addEventListener('click', handleTTToggle);
+
+};
+
+
+
+createTicks();
+slideRowInit();
+rowFunctions();
+slideToggleControl();
+autoPlayInit();
+eventListenersInit();
 /*
 To-Do
 
