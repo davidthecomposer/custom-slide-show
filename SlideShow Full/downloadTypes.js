@@ -1,7 +1,6 @@
-//Everything
+//jshint esversion: 6
 
-const jsBasicCode = 
-`
+const jsBasicCode = `
 /* jshint esversion: 6 */
 
 //global variables to access elements. 
@@ -81,7 +80,7 @@ const paneTickInit = () => {
 };
 
 
-// this is uesed when the user activates slide Editing.
+// this is used when the user activates slide Editing.
 const activePanelForward = (activeIndex, slideRows) => {
     const panes = document.querySelectorAll('.pane');
     const slideText = document.querySelectorAll('.slide-text');
@@ -218,4 +217,4 @@ const filterArrows = (event) => {
     } else if (event.keyCode === 39) {
         nextPane();
     }
-};`
+};`;

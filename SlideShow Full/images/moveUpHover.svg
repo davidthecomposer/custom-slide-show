@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg viewBox="187.469 225.034 32.949 16.529" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
-  <circle style="fill: rgb(81, 54, 99);" cx="203.984" cy="241.522" r="16.4"/>
+  <circle style="fill: rgb(170, 108, 211);" cx="203.984" cy="241.522" r="16.4"/>
   <path d="M 58.435 171.619 H 60.543 L 60.543 160.84 L 71.435 175.213 L 60.543 189.585 L 60.543 178.806 H 58.435 V 171.619 Z" style="fill: rgb(255, 255, 255);" transform="matrix(-0.010839, -0.999941, 1.000093, 0.003148, 29.459038, 297.624084)" bx:shape="arrow 58.435 160.84 13 28.745 7.187 10.892 0 1@d8d8a486"/>
 </svg>
